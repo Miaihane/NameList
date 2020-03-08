@@ -1,4 +1,4 @@
-const NAMES = ['alfred', 'alfie', 'alfie'];
+const NAMES = ['mary', 'stacy', 'sam', 'samuel', 'sam', 'miguel'];
 
 function solve(names) {
     const handleJoinMember = (groupMember = []) => {
@@ -33,12 +33,15 @@ function solve(names) {
     }
 
     const findingCommonPrefix = (source = '', destination = '') => {
-        const len = source.length > destination.length ? destination.length : source.length;
+        const sourceLongerThanDestination = source.length > destination.length;
+        const len = sourceLongerThanDestination ? destination.length : source.length;
         let result = '';
         for (let i = 0; i < len; i += 1) {
             result += source[i];
             if (source[i] !== destination[i]) {
                 break;
+            } else if (i + 1 === len && sourceLongerThanDestination) {
+                result += source[i + 1];
             }
         }
         return result;
