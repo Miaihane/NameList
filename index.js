@@ -1,53 +1,43 @@
-const NAMES = ['mary', 'stacy', 'sam', 'samuel', 'sam', 'miguel'];
+// const NAMES = ['mary', 'stacy', 'sam', 'samuel', 'sam', 'miguel'];
+const NAMES = ["ghfd", "gcjbch", "j", "gagc", "bihjcac", "hfjc", "ijh", "gbcj", "bjeh", "efadgbagd", "agb", "fehgfg", "dhefcfehee", "ahig", "iedbejcag", "jcggejfae", "hbhchccgb", "g", "fj", "jajbh", "bbfjhhgh", "gfgd", "eibcjdjaii", "ajgdif", "bbfjiei", "ad", "e", "eehgd", "hf", "gcbhifhebi", "jhfdii", "bijg", "dddig", "e", "iijhhgeda", "ajcf", "afjeg", "ccehhfeibc", "jdgiacbaf", "ba", "fagegcfig", "ieh", "eag", "jja", "bdbbadead", "bjgjddiafg", "eaaegcg", "fgjihcic", "jgachgbdcb", "jjbejb", "h", "ihaeia", "cjgba", "cccaf", "cjacid", "aeajbjgcf", "ejjdg", "f", "c", "edfbhedbeg", "eccgebciij", "iii", "ididddi", "e", "gijagihj", "d", "dhdc", "fcgfihj", "aebaeih", "i", "cehjdjc", "dabhijbfe", "cfhejjefjd", "haibjj", "icfdejac", "b", "gcbcahdbbj", "f", "hheageh", "ificg", "g", "egcijga", "ababdhhc", "efcacja", "jefbadhiig", "e", "hgajhfj", "ifddidhj", "hihe", "ja", "iifiedhbdi", "j", "jjdcedhb", "cac", "hf", "he", "hb", "bh", "e", "i"];
 
 function solve(names) {
-    const handleJoinMember = (groupMember = []) => {
-        const handledNames = [];
-        const outPut = [];
-        groupMember.forEach(memberName => {
-            const prefix = getPrefix(memberName, handledNames);
-            handledNames.push(memberName);
-            if (!outPut.includes(prefix)) {
-                outPut.push(prefix);
-            }
-        });
-        return outPut;
-    }
+    const output = [];
+    const allPrefix = {};
+    const handledNames = {};
 
-    const getPrefix = (object = '', handledNames = []) => {
-        if (handledNames.length === 0) {
-            return object[0];
-        }
-        const existedTime = handledNames.filter(name => name === object).length;
-        if (existedTime > 0) {
-            return `${object} ${existedTime + 1}`;
-        }
-        let finalPrefix = '';
-        handledNames.forEach(name => {
-            const tmpPrefix = findingCommonPrefix(object, name);
-            if (tmpPrefix.length > finalPrefix.length) {
-                finalPrefix = tmpPrefix;
-            }
-        });
-        return finalPrefix;
-    }
+    names.forEach(name => {
+        if (name in handledNames) {
+            handledNames[name] += 1;
+            output.push(`${name} ${handledNames[name]}`);
+        } else {
+            handledNames[name] = 1;
 
-    const findingCommonPrefix = (source = '', destination = '') => {
-        const sourceLongerThanDestination = source.length > destination.length;
-        const len = sourceLongerThanDestination ? destination.length : source.length;
-        let result = '';
-        for (let i = 0; i < len; i += 1) {
-            result += source[i];
-            if (source[i] !== destination[i]) {
-                break;
-            } else if (i + 1 === len && sourceLongerThanDestination) {
-                result += source[i + 1];
-            }
+            let tmpPrefix = '';
+            let pushInOutput = true;
+
+            const chars = name.split('');
+
+            chars.forEach((char, idx) => {
+                tmpPrefix += char;
+
+                if (tmpPrefix in allPrefix) {
+                    allPrefix[tmpPrefix] += 1;
+                    if (chars.length === idx + 1) {
+                        output.push(tmpPrefix);
+                    }
+                } else {
+                    allPrefix[tmpPrefix] = 0;
+                    if (pushInOutput) {
+                        output.push(tmpPrefix);
+                        pushInOutput = false;
+                    }                    
+                }
+            });
         }
-        return result;
-    }
-    
-    names = handleJoinMember(NAMES);
+    });
+
+    names = [...output];
     return names;
 }
 
